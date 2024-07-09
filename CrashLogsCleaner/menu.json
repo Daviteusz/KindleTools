@@ -1,0 +1,18 @@
+{
+	"items": [
+	{
+		"name": "CrashLogs Cleaner",
+		"priority": 0,
+		"items": [
+		{
+			"name": "Remove Crash Logs",
+			"priority": 1,
+			"action": "./bin/crash_logs_cleaner.sh",
+			"params": "--kual",
+			"exitmenu": true,
+			"checked": true
+		}
+		]
+	}
+	]
+}
