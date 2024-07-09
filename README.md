@@ -16,12 +16,18 @@ The script searches and deletes log files in `.txt`, `.tgz` formats, and `.sdr` 
 3. Choose "Remove Crash Logs".
 
 ### Using with KOReader
-1. Launch KOReader, navigate to (Tools icon) > More Tools > Terminal Emulator.
-2. Set the shell executable to `/mnt/us/extensions/CrashLogsCleaner/bin/crash_logs_cleaner.sh --koreader`.
-3. Start the terminal session!
+Using with KOReader
+1. Launch KOReader, navigate to (Tools icon) > More Tools > Terminal Emulator > Start Terminal Session
+2. Click menu button "=" > Create new alias:
+Name:
+clear_logs
+Command:
+/mnt/us/extensions/CrashLogsCleaner/bin/crash_logs_cleaner.sh --koreader.
+3. Execute!
+
+Alias will be saved in this menu for future use.
 
 You can also manually run the script using the following command:
-
 ```sh
 sh /mnt/us/extensions/CrashLogsCleaner/bin/crash_logs_cleaner.sh --koreader
 ```
