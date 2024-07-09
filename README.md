@@ -19,10 +19,8 @@ The script searches and deletes log files in `.txt`, `.tgz` formats, and `.sdr` 
 Using with KOReader
 1. Launch KOReader, navigate to (Tools icon) > More Tools > Terminal Emulator > Start Terminal Session
 2. Click menu button "=" > Create new alias:
-Name:
-clear_logs
-Command:
-/mnt/us/extensions/CrashLogsCleaner/bin/crash_logs_cleaner.sh --koreader.
+- Name: `clc`
+- Command: `/mnt/us/extensions/CrashLogsCleaner/bin/crash_logs_cleaner.sh --koreader`
 3. Execute!
 
 Alias will be saved in this menu for future use.
