@@ -52,13 +52,12 @@ kual_function() {
     sleep 3
     fbink -pmh -y -5 -F TERMINUS "Wait ≈5 min" "and try again"
   else
-    fbink -pmh -y -5 -F TERMINUS "Logs" "removed successfully!"
+    fbink -pmh -y -5 -F TERMINUS "Crash Logs" "removed successfully!"
   fi
 }
 
 koreader_function() {
-  echo -e "**** KPPMainAppV2 ****"
-  echo -e "* Crash Logs Remover *\n"
+  echo -e "** CrashLogs Cleaner v1.2 **\n"
   sleep 2
 
   clean_logs "$log_pattern_kpp"
