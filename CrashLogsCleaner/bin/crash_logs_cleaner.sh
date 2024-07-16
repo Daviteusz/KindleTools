@@ -1,8 +1,7 @@
 #!/bin/sh
 
-exec_shell="bash" # set the shell you like (for koreader)
-
-base_dir="/mnt/us/documents"
+version="v1.3"
+base_dir="./mnt/us/documents"
 log_pattern_kpp="KPPMainAppV2*"
 log_pattern_tmd="tmd_*"
 
@@ -31,65 +30,80 @@ clean_logs() {
   fi
 
   if [ -n "$sdr_directory" ]; then
-    find "$base_dir" -type d -name "$log_pattern.sdr" -exec rm -rf {} +
+    find "$base_dir" -type d -name "$log_pattern.sdr" -exec rm -r {} +
     sdr_deleted=1
   fi
 
-  return $((txt_deleted + tgz_deleted + sdr_deleted))
+  echo $((txt_deleted + tgz_deleted + sdr_deleted))
 }
 
 kual_function() {
-  clean_logs "$log_pattern_kpp"
-  kpp_status=$?
-
-  clean_logs "$log_pattern_tmd"
-  tmd_status=$?
+  echo "** CrashLogs Cleaner "$version" **"
+  sleep 1
+  kpp_status=$(clean_logs "$log_pattern_kpp")
+  tmd_status=$(clean_logs "$log_pattern_tmd")
 
   if [ $kpp_status -eq 0 ] && [ $tmd_status -eq 0 ]; then
-    fbink -pmh -y -5 -F TERMINUS "There is nothing" "to remove"
-  elif [ $kpp_status -lt 3 ] || [ $tmd_status -lt 3 ]; then
-    fbink -pmh -y -5 -F TERMINUS "Not all logs" "have been deleted."
-    sleep 3
-    fbink -pmh -y -5 -F TERMINUS "Wait ≈5 min" "and try again"
+    fbink -pmh -y 14 -F TERMINUS "Crash logs not found." "Horray!"
   else
-    fbink -pmh -y -5 -F TERMINUS "Crash Logs" "removed successfully!"
+    if [ $kpp_status -eq 3 ] && [ $tmd_status -eq 3 ] ; then
+      fbink -pmh -y 14 -F TERMINUS "Crash Logs removed" "successfully!"
+      sleep 3
+    elif [ $kpp_status -lt 3 ] && [ $tmd_status -eq 3 ]; then
+      fbink -pmh -y 14 -F TERMINUS "Warning: Not all "KPPMainAppV2_*" crash logs have been removed"
+      sleep 3
+      fbink -pmh -y 16 -F TERMINUS "Wait ≈5 min and rerun terminal again"
+      sleep 3
+    elif [ $tmd_status -lt 3 ] && [ $kpp_status -eq 3 ]; then
+      fbink -pmh -y 14 -F TERMINUS "Warning: Not all tmd_* crash logs" "have been removed"
+      sleep 3
+      fbink -pmh -y 16 -F TERMINUS "Wait ≈5 min and rerun terminal again"
+      sleep 3
+    elif [ $tmd_status -lt 3 ] && [ $kpp_status -lt 3 ]; then
+      fbink -pmh -y 14 -F TERMINUS "Warning: Not all crash logs" "have been removed"
+      sleep 3
+      fbink -pmh -y 16 -F TERMINUS "Wait ≈5 min and rerun terminal again"
+      sleep 3
+    fi
   fi
 }
 
 koreader_function() {
-  echo -e "** CrashLogs Cleaner v1.2 **\n"
-  sleep 2
+  echo "** CrashLogs Cleaner "$version" **"
+  sleep 1
 
-  clean_logs "$log_pattern_kpp"
-  kpp_status=$?
-
-  clean_logs "$log_pattern_tmd"
-  tmd_status=$?
+  kpp_status=$(clean_logs "$log_pattern_kpp")
+  tmd_status=$(clean_logs "$log_pattern_tmd")
 
   if [ $kpp_status -eq 0 ] && [ $tmd_status -eq 0 ]; then
-    echo "KPP Crash Logs not found"
-    sleep 2
-    echo "If you ran this right after starting KOReader,"
-    echo "wait 5 minutes and run terminal again."
-    sleep 6
-  elif [ $kpp_status -lt 3 ] || [ $tmd_status -lt 3 ]; then
-    echo "- Warning: Not all logs have been removed"
-    sleep 3
-    echo "  Wait ≈5 min and rerun terminal again"
-    sleep 3
+    echo "Crash logs not found. Horray!"
   else
-    echo "- Logs removed successfully"
-    sleep 3
+    if [ $kpp_status -eq 3 ] && [ $tmd_status -eq 3 ] ; then
+      echo "Crash Logs removed successfully!"
+      sleep 3
+    elif [ $kpp_status -lt 3 ] && [ $tmd_status -eq 3 ]; then
+      echo "Warning: Not all "KPPMainAppV2_*" crash logs have been removed"
+      sleep 2
+      echo "Wait ≈5 min and rerun terminal again"
+      sleep 2
+    elif [ $tmd_status -lt 3 ] && [ $kpp_status -eq 3 ]; then
+      echo "Warning: Not all "tmd_*" crash logs have been removed"
+      sleep 3
+      echo "Wait ≈5 min and rerun terminal again"
+      sleep 3
+    elif [ $tmd_status -lt 3 ] && [ $kpp_status -lt 3 ]; then
+      echo "Warning: Not all logs have been removed"
+      sleep 3
+      echo "Wait ≈5 min and rerun terminal again"
+      sleep 3
+    fi
   fi
-
-  echo -en "\e[1;1H\e[2J"
-  exec "$exec_shell"
 }
 
 if [ "$1" = "--kual" ]; then
   kual_function
-elif [ "$1" = "--koreader" ]; then
+elif [ "$1" = "" ]; then
   koreader_function
 else
-  echo "Usage: $0 --kual | --koreader"
+  echo "Usage: $0"
 fi
