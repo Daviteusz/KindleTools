@@ -1,7 +1,7 @@
 #!/bin/sh
 
 version="v1.3"
-base_dir="./mnt/us/documents"
+base_dir="/mnt/us/documents"
 log_pattern_kpp="KPPMainAppV2*"
 log_pattern_tmd="tmd_*"
 
